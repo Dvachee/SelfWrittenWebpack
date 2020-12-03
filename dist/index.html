@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>Hello JULIAS!</p>
+    <script src="/static/index.js"></script>
+<!-- Code injected by live-server -->
+<script type="text/javascript">
+    // <![CDATA[  <-- For SVG support
+    if ('WebSocket' in window) {
+        (function () {
+            console.log('HERE!')
+            const wsConnection = new WebSocket("ws://localhost:8999");
+            wsConnection.onmessage = function (ev) {
+                console.log(ev.data)
+                if (ev.data === 'update') {
+                    window.location.reload();
+                }
+            }
+            wsConnection.onclose = function (event) {
+                if (event.wasClean) {
+                    console.log('Соединение закрыто чисто');
+                } else {
+                    console.log('Обрыв соединения'); // например, "убит" процесс сервера
+                }
+                console.log('Код: ' + event.code + ' причина: ' + event.reason);
+            };
+
+            wsConnection.onerror = function (error) {
+                console.log("Ошибка " + error.message);
+            };
+
+            const wsSend = function (data) {
+                // readyState - true, если есть подключение
+                if (!wsConnection.readyState) {
+                    setTimeout(function () {
+                        wsSend(data);
+                    }, 100);
+                } else {
+                    wsConnection.send(data);
+                }
+            };
+        })();
+    }
+    else {
+        console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+    }
+	// ]]>
+</script></body>
+
+</html>
